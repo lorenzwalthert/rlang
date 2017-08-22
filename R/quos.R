@@ -8,7 +8,7 @@
 #' definition expressions of the type `var := expr`, with some
 #' differences:
 #'
-#'\describe{
+#' \describe{
 #'  \item{`quos()`}{
 #'    When `:=` definitions are supplied to `quos()`, they are treated
 #'    as a synonym of argument assignment `=`. On the other hand, they

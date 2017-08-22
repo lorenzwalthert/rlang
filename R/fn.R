@@ -280,7 +280,7 @@ is_primitive_lazy <- function(x) {
 #' fn_env(fn) <- other_env
 #' identical(fn_env(fn), other_env)
 fn_env <- function(fn) {
-  if(!is_function(fn)) {
+  if (!is_function(fn)) {
     abort("`fn` is not a function", "type")
   }
   environment(fn)
@@ -289,7 +289,7 @@ fn_env <- function(fn) {
 #' @export
 #' @rdname fn_env
 `fn_env<-` <- function(x, value) {
-  if(!is_function(x)) {
+  if (!is_function(x)) {
     abort("`fn` is not a function", "type")
   }
   environment(x) <- value
@@ -332,7 +332,8 @@ fn_env <- function(fn) {
 #' as_closure(`+`)
 #' as_closure(`~`)
 as_function <- function(x, env = caller_env()) {
-  coerce_type(x, friendly_type("function"),
+  coerce_type(
+    x, friendly_type("function"),
     primitive = ,
     closure = {
       x
@@ -353,7 +354,8 @@ as_function <- function(x, env = caller_env()) {
 #' @export
 as_closure <- function(x, env = caller_env()) {
   x <- as_function(x, env = env)
-  coerce_type(x, "a closure",
+  coerce_type(
+    x, "a closure",
     closure =
       x,
     primitive = {
@@ -384,7 +386,8 @@ as_closure <- function(x, env = caller_env()) {
 }
 
 op_as_closure <- function(prim_nm) {
-  switch(prim_nm,
+  switch(
+    prim_nm,
     `<-` = ,
     `<<-` = ,
     `=` = function(.x, .y) {
@@ -406,7 +409,7 @@ op_as_closure <- function(prim_nm) {
       eval_bare(expr, caller_env())
     },
     `[<-` = function(.x, ...) {
-      expr <- expr(`[<-`(!! enexpr(.x), !!! exprs(...)))
+      expr <- expr(`[<-`(!!enexpr(.x), !!!exprs(...)))
       eval_bare(expr, caller_env())
     },
     `(` = function(.x) .x,
@@ -433,7 +436,7 @@ op_as_closure <- function(prim_nm) {
     `>=` = function(.x, .y) .x >= .y,
     `==` = function(.x, .y) .x == .y,
     `!=` = function(.x, .y) .x != .y,
-    `:` = function(.x, .y) .x : .y,
+    `:` = function(.x, .y) .x:.y,
     `~` = function(.x, .y) {
       if (is_missing(substitute(.y))) {
         new_formula(NULL, substitute(.x), caller_env())

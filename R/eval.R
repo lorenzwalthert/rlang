@@ -178,7 +178,7 @@ invoke <- function(.fn, .args = list(), ...,
     if (is_scalar_character(.fn)) {
       .fn <- env_get(.env, .fn, inherit = TRUE)
     }
-    call <- lang(.fn, !!! args)
+    call <- lang(.fn, !!!args)
     return(.Call(r_eval, call, .env))
   }
 
@@ -191,15 +191,15 @@ invoke <- function(.fn, .args = list(), ...,
 
   buried_nms <- paste0(arg_prefix, seq_along(args))
   buried_args <- set_names(args, buried_nms)
-  .env <- env_bury(.env, !!! buried_args)
+  .env <- env_bury(.env, !!!buried_args)
   args <- set_names(buried_nms, names(args))
   args <- syms(args)
 
   if (is_function(.fn)) {
-    env_bind(.env, !! fn_nm := .fn)
+    env_bind(.env, !!fn_nm := .fn)
     .fn <- fn_nm
   }
 
-  call <- lang(.fn, !!! args)
+  call <- lang(.fn, !!!args)
   .Call(r_eval, call, .env)
 }

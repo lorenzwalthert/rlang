@@ -1,22 +1,32 @@
 context("unquote")
 
 test_that("interpolation does not recurse over spliced arguments", {
-  var1 <- quote(!! stop())
-  var2 <- quote({foo; !! stop(); bar})
-  expect_error(quo(list(!!! var1)), NA)
-  expect_error(expr(list(!!! var2)), NA)
+  var1 <- quote(!!stop())
+  var2 <- quote({
+    foo
+    !!stop()
+    bar
+  })
+  expect_error(quo(list(!!!var1)), NA)
+  expect_error(expr(list(!!!var2)), NA)
 })
 
 test_that("formulas containing unquote operators are interpolated", {
   var1 <- quo(foo)
-  var2 <- local({ foo <- "baz"; quo(foo) })
+  var2 <- local({
+    foo <- "baz"
+    quo(foo)
+  })
 
   f <- expr_interp(~list(!!var1, !!var2))
   expect_identical(f, new_quosure(lang("list", as_quosure(var1), as_quosure(var2))))
 })
 
 test_that("interpolation is carried out in the right environment", {
-  f <- local({ foo <- "foo"; ~!!foo })
+  f <- local({
+    foo <- "foo"
+    ~!!foo
+  })
   expect_identical(expr_interp(f), new_quosure("foo", env = f_env(f)))
 })
 
@@ -57,18 +67,18 @@ test_that("can qualify operators with namespace", {
 })
 
 test_that("unquoting is frame-consistent", {
-  defun <- quote(!! function() NULL)
+  defun <- quote(!!function() NULL)
   env <- child_env("base")
   expect_identical(fn_env(expr_interp(defun, env)), env)
 })
 
 test_that("unquoted quosure has S3 class", {
-  quo <- quo(!! ~quo)
+  quo <- quo(!!~quo)
   expect_is(quo, "quosure")
 })
 
 test_that("unquoted quosures are not guarded", {
-  quo <- eval_tidy(quo(quo(!! ~quo)))
+  quo <- eval_tidy(quo(quo(!!~quo)))
   expect_true(is_quosure(quo))
 })
 
@@ -80,7 +90,7 @@ test_that("evaluates contents of UQ()", {
 })
 
 test_that("quosures are not rewrapped", {
-  var <- quo(!! quo(letters))
+  var <- quo(!!quo(letters))
   expect_identical(quo(!!var), quo(letters))
 
   var <- new_quosure(local(~letters), env = child_env(get_env()))
@@ -113,19 +123,21 @@ test_that("names within UQS() are preseved", {
 
 test_that("UQS() handles language objects", {
   expect_identical(quo(list(UQS(quote(foo)))), quo(list(foo)))
-  expect_identical(quo(list(UQS(quote({ foo })))), quo(list(foo)))
+  expect_identical(quo(list(UQS(quote({
+    foo
+  })))), quo(list(foo)))
 })
 
 test_that("splicing an empty vector works", {
-  expect_identical(expr_interp(~list(!!! list())), quo(list()))
-  expect_identical(expr_interp(~list(!!! character(0))), quo(list()))
-  expect_identical(expr_interp(~list(!!! NULL)), quo(list()))
+  expect_identical(expr_interp(~list(!!!list())), quo(list()))
+  expect_identical(expr_interp(~list(!!!character(0))), quo(list()))
+  expect_identical(expr_interp(~list(!!!NULL)), quo(list()))
 })
 
 test_that("serialised unicode in argument names is parsed on splice", {
   nms <- with_latin1_locale({
     exprs <- exprs("\u5e78" := 10)
-    quos <- quos(!!! exprs)
+    quos <- quos(!!!exprs)
     names(quos)
   })
   expect_identical(as_bytes(nms), as_bytes("\u5e78"))
@@ -150,9 +162,9 @@ test_that("single ! is not treated as shortcut", {
 
 test_that("double and triple ! are treated as syntactic shortcuts", {
   var <- local(quo(foo))
-  expect_identical(quo(!! var), as_quosure(var))
-  expect_identical(quo(!! quo(foo)), quo(foo))
-  expect_identical(quo(list(!!! letters[1:3])), quo(list("a", "b", "c")))
+  expect_identical(quo(!!var), as_quosure(var))
+  expect_identical(quo(!!quo(foo)), quo(foo))
+  expect_identical(quo(list(!!!letters[1:3])), quo(list("a", "b", "c")))
 })
 
 test_that("`!!` works in prefixed calls", {
@@ -181,10 +193,10 @@ test_that("quosures are created for all informative formulas", {
 # dots_values() ------------------------------------------------------
 
 test_that("can unquote-splice symbols", {
-  expect_identical(ll(!!! list(quote(`_symbol`))), list(quote(`_symbol`)))
+  expect_identical(ll(!!!list(quote(`_symbol`))), list(quote(`_symbol`)))
 })
 
 test_that("can unquote symbols", {
-  expect_identical(dots_values(!! quote(.)), named_list(quote(.)))
+  expect_identical(dots_values(!!quote(.)), named_list(quote(.)))
   expect_identical(dots_values(rlang::UQ(quote(.))), named_list(quote(.)))
 })

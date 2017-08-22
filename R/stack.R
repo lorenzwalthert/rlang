@@ -236,7 +236,6 @@ trail_next <- function(callers, i, clean) {
       callers <- callers[-special_eval_pos]
       i <- i - 1L
     }
-
   }
 
   list(callers = callers, i = i)

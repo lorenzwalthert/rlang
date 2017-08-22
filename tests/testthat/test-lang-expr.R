@@ -33,7 +33,9 @@ test_that("converts atomics to strings", {
 })
 
 test_that("truncates long calls", {
-  expect_equal(expr_label(quote({ a + b })), "`{\n    ...\n}`")
+  expect_equal(expr_label(quote({
+    a + b
+  })), "`{\n    ...\n}`")
 })
 
 

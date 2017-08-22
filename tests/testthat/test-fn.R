@@ -6,7 +6,9 @@ test_that("new_function equivalent to regular function", {
   }
   attr(f1, "srcref") <- NULL
 
-  f2 <- new_function(alist(x = a + b, y =), quote({x + y}))
+  f2 <- new_function(alist(x = a + b, y = ), quote({
+    x + y
+  }))
 
   expect_equal(f1, f2)
 })

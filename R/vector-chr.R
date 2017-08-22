@@ -98,7 +98,8 @@ as_native_character <- function(x) {
 #' @rdname as_utf8_character
 #' @export
 as_utf8_string <- function(x) {
-  coerce_type(x, "an UTF-8 string",
+  coerce_type(
+    x, "an UTF-8 string",
     symbol = ,
     string = enc2utf8(as_string(x))
   )
@@ -106,7 +107,8 @@ as_utf8_string <- function(x) {
 #' @rdname as_utf8_character
 #' @export
 as_native_string <- function(x) {
-  coerce_type(x, "a natively encoded string",
+  coerce_type(
+    x, "a natively encoded string",
     symbol = ,
     string = enc2native(as_string(x))
   )

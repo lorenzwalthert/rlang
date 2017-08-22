@@ -9,7 +9,7 @@ test_that("dots are retrieved from arguments", {
 })
 
 test_that("exprs() captures empty arguments", {
-  expect_identical(exprs(, , .ignore_empty = "none"), set_names(list(missing_arg(), missing_arg()), c("", "")))
+  expect_identical(exprs(,, .ignore_empty = "none"), set_names(list(missing_arg(), missing_arg()), c("", "")))
 })
 
 test_that("dots are always named", {
@@ -19,11 +19,11 @@ test_that("dots are always named", {
 })
 
 test_that("dots can be spliced", {
-  expect_identical(dots_values(!!! list(letters)), named_list(splice(list(letters))))
-  expect_identical(flatten(dots_values(!!! list(letters))), list(letters))
-  expect_identical(ll(!!! list(letters)), list(letters))
+  expect_identical(dots_values(!!!list(letters)), named_list(splice(list(letters))))
+  expect_identical(flatten(dots_values(!!!list(letters))), list(letters))
+  expect_identical(ll(!!!list(letters)), list(letters))
   wrapper <- function(...) ll(...)
-  expect_identical(wrapper(!!! list(letters)), list(letters))
+  expect_identical(wrapper(!!!list(letters)), list(letters))
 })
 
 test_that("interpolation by value does not guard formulas", {
@@ -31,7 +31,7 @@ test_that("interpolation by value does not guard formulas", {
 })
 
 test_that("dots names can be unquoted", {
-  expect_identical(dots_values(!! paste0("foo", "bar") := 10), list(foobar = 10))
+  expect_identical(dots_values(!!paste0("foo", "bar") := 10), list(foobar = 10))
 })
 
 test_that("can take forced dots with strict = FALSE", {

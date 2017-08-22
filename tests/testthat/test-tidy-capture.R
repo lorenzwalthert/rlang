@@ -24,12 +24,12 @@ test_that("dots are interpolated", {
   fn <- function(...) {
     baz <- "baz"
     fn_var <- quo(baz)
-    g(..., toupper(!! fn_var))
+    g(..., toupper(!!fn_var))
   }
   g <- function(...) {
     foo <- "foo"
     g_var <- quo(foo)
-    h(toupper(!! g_var), ...)
+    h(toupper(!!g_var), ...)
   }
   h <- function(...) {
     quos(...)
@@ -57,7 +57,7 @@ test_that("dots capture is stack-consistent", {
 })
 
 test_that("splice is consistently recognised", {
-  expect_true(is_splice(quote(!!! list())))
+  expect_true(is_splice(quote(!!!list())))
   expect_true(is_splice(quote(UQS(list()))))
   expect_true(is_splice(quote(rlang::UQS(list()))))
   expect_false(is_splice(quote(ns::UQS(list()))))
@@ -67,7 +67,7 @@ test_that("dots can be spliced in", {
   fn <- function(...) {
     var <- "var"
     list(
-      out = g(!!! quos(...), bar(baz), !!! list(a = var, b = ~foo)),
+      out = g(!!!quos(...), bar(baz), !!!list(a = var, b = ~foo)),
       env = get_env()
     )
   }
@@ -80,14 +80,14 @@ test_that("dots can be spliced in", {
     quo(foo(bar)),
     set_env(quo(bar(baz)), out$env),
     a = quo("var"),
-    b = set_env(quo(!! with_env(out$env, ~foo)), out$env)
+    b = set_env(quo(!!with_env(out$env, ~foo)), out$env)
   )
   expect_identical(out$out, expected)
 })
 
 test_that("spliced dots are wrapped in formulas", {
   args <- alist(x = var, y = foo(bar))
-  expect_identical(quos(!!! args), quos_list(x = quo(var), y = quo(foo(bar))))
+  expect_identical(quos(!!!args), quos_list(x = quo(var), y = quo(foo(bar))))
 })
 
 test_that("dot names are interpolated", {
@@ -100,11 +100,11 @@ test_that("dot names are interpolated", {
 })
 
 test_that("corner cases are handled when interpolating dot names", {
-    var <- na_chr
-    expect_identical(names(quos(!!var := NULL)), na_chr)
+  var <- na_chr
+  expect_identical(names(quos(!!var := NULL)), na_chr)
 
-    var <- NULL
-    expect_error(quos(!!var := NULL), "must be a name or string")
+  var <- NULL
+  expect_error(quos(!!var := NULL), "must be a name or string")
 })
 
 test_that("definitions are interpolated", {
@@ -154,7 +154,7 @@ test_that("can capture empty list of dots", {
 })
 
 test_that("quosures are spliced before serialisation", {
-  quosures <- quos(!! quo(foo(!! quo(bar))), .named = TRUE)
+  quosures <- quos(!!quo(foo(!!quo(bar))), .named = TRUE)
   expect_identical(names(quosures), "foo(bar)")
 })
 
@@ -170,22 +170,22 @@ test_that("empty quosures are forwarded", {
   expect_identical(outer(), quo())
 
   inner <- function(x) enquo(x)
-  outer <- function(x) inner(!! enquo(x))
+  outer <- function(x) inner(!!enquo(x))
   expect_identical(outer(), quo())
 })
 
 test_that("quos() captures missing arguments", {
-  expect_identical(quos(, , .ignore_empty = "none"), quos_list(quo(), quo()), c("", ""))
+  expect_identical(quos(,, .ignore_empty = "none"), quos_list(quo(), quo()), c("", ""))
 })
 
 test_that("quos() ignores missing arguments", {
-  expect_identical(quos(, , "foo", ), quos_list(quo(), quo(), new_quosure("foo", empty_env())))
-  expect_identical(quos(, , "foo", , .ignore_empty = "all"), quos_list(new_quosure("foo", empty_env())))
+  expect_identical(quos(,, "foo", ), quos_list(quo(), quo(), new_quosure("foo", empty_env())))
+  expect_identical(quos(,, "foo",, .ignore_empty = "all"), quos_list(new_quosure("foo", empty_env())))
 })
 
 test_that("quosured literals are forwarded as is", {
-  expect_identical(quo(!! quo(NULL)), new_quosure(NULL, empty_env()))
-  expect_identical(quos(!! quo(10L)), set_names(quos_list(new_quosure(10L, empty_env())), ""))
+  expect_identical(quo(!!quo(NULL)), new_quosure(NULL, empty_env()))
+  expect_identical(quos(!!quo(10L)), set_names(quos_list(new_quosure(10L, empty_env())), ""))
 })
 
 test_that("expr() returns missing argument", {

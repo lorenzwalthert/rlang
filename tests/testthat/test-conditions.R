@@ -11,7 +11,8 @@ test_that("cnd() throws with unnamed fields", {
 })
 
 test_that("cnd_signal() creates muffle restarts", {
-  withCallingHandlers(cnd_signal("foo", .mufflable = TRUE),
+  withCallingHandlers(
+    cnd_signal("foo", .mufflable = TRUE),
     foo = function(c) {
       expect_true(rst_exists("muffle"))
       expect_is(c, "mufflable")
@@ -105,7 +106,8 @@ test_that("error when msg is not a string", {
 context("restarts") # ------------------------------------------------
 
 test_that("restarts are established", {
-  with_restarts(foo = function() {}, expect_true(rst_exists("foo")))
+  with_restarts(foo = function() {
+  }, expect_true(rst_exists("foo")))
 })
 
 
@@ -116,17 +118,25 @@ test_that("Local handlers can muffle mufflable conditions", {
   muffling_handler <- inplace(function(c) NULL, muffle = TRUE)
   non_muffling_handler <- inplace(function(c) NULL, muffle = FALSE)
 
-  expect_error(regexp = "not muffled!",
+  expect_error(
+    regexp = "not muffled!",
     withCallingHandlers(foo = function(c) stop("not muffled!"), {
-      withCallingHandlers(foo = non_muffling_handler,
-        signal_mufflable())
-    }))
+      withCallingHandlers(
+        foo = non_muffling_handler,
+        signal_mufflable()
+      )
+    })
+  )
 
-  expect_error(regexp = NA,
+  expect_error(
+    regexp = NA,
     withCallingHandlers(foo = function(c) stop("not muffled!"), {
-      withCallingHandlers(foo = muffling_handler,
-        signal_mufflable())
-    }))
+      withCallingHandlers(
+        foo = muffling_handler,
+        signal_mufflable()
+      )
+    })
+  )
 })
 
 test_that("with_handlers() establishes inplace and exiting handlers", {
@@ -140,8 +150,14 @@ test_that("with_handlers() establishes inplace and exiting handlers", {
   expect_equal(with_handlers(identity(letters), splice(handlers)), identity(letters))
   expect_equal(with_handlers(stop(letters), splice(handlers)), "caught error")
   expect_equal(with_handlers(message(letters), splice(handlers)), "caught message")
-  expect_warning(expect_equal(with_handlers({ warning("warn!"); letters }, splice(handlers)), identity(letters)), "warn!")
-  expect_output(expect_equal(with_handlers({ cnd_signal("foobar"); letters }, splice(handlers)), identity(letters)), "foobar")
+  expect_warning(expect_equal(with_handlers({
+    warning("warn!")
+    letters
+  }, splice(handlers)), identity(letters)), "warn!")
+  expect_output(expect_equal(with_handlers({
+    cnd_signal("foobar")
+    letters
+  }, splice(handlers)), identity(letters)), "foobar")
 })
 
 test_that("set_names2() fills in empty names", {
@@ -157,7 +173,8 @@ test_that("restarting() handlers pass along all requested arguments", {
     with_handlers(signal_foo(), foo = restart_handler)
   }
 
-  restart_handler <- restarting("rst_foo",
+  restart_handler <- restarting(
+    "rst_foo",
     a = "a",
     splice(list(b = "b")),
     .fields = c(field_arg = "foo_field")

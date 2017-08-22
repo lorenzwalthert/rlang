@@ -176,7 +176,8 @@ new_environment <- function(data = list()) {
 #' # With NULL it returns the empty environment:
 #' as_env(NULL)
 as_env <- function(x, parent = NULL) {
-  coerce_type(x, "an environment",
+  coerce_type(
+    x, "an environment",
     NULL = {
       empty_env()
     },
@@ -266,7 +267,7 @@ env_tail <- function(env = caller_env()) {
   env_ <- get_env(env)
   next_env <- parent.env(env_)
 
-  while(!is_empty_env(next_env)) {
+  while (!is_empty_env(next_env)) {
     env_ <- next_env
     next_env <- parent.env(next_env)
   }
@@ -279,7 +280,7 @@ env_parents <- function(env = caller_env()) {
   out <- list_len(env_depth(env))
 
   i <- 1L
-  while(!is_empty_env(env)) {
+  while (!is_empty_env(env)) {
     env <- env_parent(env)
     out[[i]] <- env
     i <- i + 1L
@@ -306,7 +307,7 @@ env_depth <- function(env) {
   env_ <- get_env(env)
 
   n <- 0L
-  while(!is_empty_env(env_)) {
+  while (!is_empty_env(env_)) {
     env_ <- env_parent(env_)
     n <- n + 1L
   }
@@ -367,7 +368,8 @@ is_empty_env <- function(env) {
 #' default <- env()
 #' identical(get_env(f, default), default)
 get_env <- function(env = caller_env(), default = NULL) {
-  out <- switch_type(env,
+  out <- switch_type(
+    env,
     environment = env,
     definition = ,
     formula = attr(env, ".Environment"),
@@ -411,7 +413,8 @@ get_env <- function(env = caller_env(), default = NULL) {
 #' fn <- set_env(fn, other_env)
 #' identical(get_env(fn), other_env)
 set_env <- function(env, new_env = caller_env()) {
-  switch_type(env,
+  switch_type(
+    env,
     definition = ,
     formula = ,
     closure = {
@@ -692,7 +695,7 @@ env_unbind <- function(env = caller_env(), nms, inherit = FALSE) {
   env_ <- get_env(env)
 
   if (inherit) {
-    while(any(env_has(env_, nms, inherit = TRUE))) {
+    while (any(env_has(env_, nms, inherit = TRUE))) {
       rm(list = nms, envir = env, inherits = TRUE)
     }
   } else {
@@ -795,7 +798,7 @@ scope_set <- function(env, nm, value, create) {
   env_ <- get_env(env)
   cur <- env_
 
-  while(!env_has(cur, nm) && !is_empty_env(cur)) {
+  while (!env_has(cur, nm) && !is_empty_env(cur)) {
     cur <- env_parent(cur)
   }
 
@@ -880,7 +883,7 @@ env_inherits <- function(env, ancestor) {
   env <- get_env(env)
   stopifnot(is_env(ancestor) && is_env(env))
 
-  while(!is_empty_env(env_parent(env))) {
+  while (!is_empty_env(env_parent(env))) {
     env <- env_parent(env)
     if (is_reference(env, ancestor)) {
       return(TRUE)
@@ -1095,7 +1098,8 @@ env_type <- function(env) {
   }
 }
 friendly_env_type <- function(type) {
-  switch(type,
+  switch(
+    type,
     global = "the global environment",
     empty = "the empty environment",
     base = "the base environment",

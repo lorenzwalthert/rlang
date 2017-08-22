@@ -114,7 +114,8 @@ test_that("lang_fn() extracts function", {
 
 test_that("Inlined functions return NULL name", {
   call <- quote(fn())
-  call[[1]] <- function() {}
+  call[[1]] <- function() {
+  }
   expect_null(lang_name(call))
 })
 

@@ -66,16 +66,16 @@ test_that("unquoted formulas can use data", {
 
   z <- 10
   expect_identical(eval_tidy(f2(), list(x = 1)), 101)
-  expect_identical(eval_tidy(quo(!! f1()), data = list(x = 1)), 101)
-  expect_identical(eval_tidy(quo(!! f2()), data = list(x = 1)), 101)
+  expect_identical(eval_tidy(quo(!!f1()), data = list(x = 1)), 101)
+  expect_identical(eval_tidy(quo(!!f2()), data = list(x = 1)), 101)
 })
 
 test_that("bare formulas are not evaluated", {
   f <- local(~x)
-  expect_identical(eval_tidy(quo(!! f)), f)
+  expect_identical(eval_tidy(quo(!!f)), f)
 
   f <- a ~ b
-  expect_identical(eval_tidy(quo(!! f)), f)
+  expect_identical(eval_tidy(quo(!!f)), f)
 })
 
 test_that("quosures are not evaluated if not forced", {
@@ -83,13 +83,13 @@ test_that("quosures are not evaluated if not forced", {
     if (force) arg else "bar"
   }
 
-  f1 <- quo(fn(!! quo(stop("forced!")), force = FALSE))
-  f2 <- quo(fn(!! local(quo(stop("forced!"))), force = FALSE))
+  f1 <- quo(fn(!!quo(stop("forced!")), force = FALSE))
+  f2 <- quo(fn(!!local(quo(stop("forced!"))), force = FALSE))
   expect_identical(eval_tidy(f1), "bar")
   expect_identical(eval_tidy(f2), "bar")
 
-  f_forced1 <- quo(fn(!! quo(stop("forced!")), force = TRUE))
-  f_forced2 <- quo(fn(!! local(quo(stop("forced!"))), force = TRUE))
+  f_forced1 <- quo(fn(!!quo(stop("forced!")), force = TRUE))
+  f_forced2 <- quo(fn(!!local(quo(stop("forced!"))), force = TRUE))
   expect_error(eval_tidy(f_forced1), "forced!")
   expect_error(eval_tidy(f_forced2), "forced!")
 })
@@ -104,7 +104,7 @@ test_that("can unquote captured arguments", {
 test_that("quosures are evaluated recursively", {
   foo <- "bar"
   expect_identical(eval_tidy(quo(foo)), "bar")
-  expect_identical(eval_tidy(quo(!!quo(!! quo(foo)))), "bar")
+  expect_identical(eval_tidy(quo(!!quo(!!quo(foo)))), "bar")
 })
 
 test_that("quosures have lazy semantics", {
@@ -115,7 +115,8 @@ test_that("quosures have lazy semantics", {
 test_that("can unquote hygienically within captured arg", {
   fn <- function(df, arg) eval_tidy(enquo(arg), df)
 
-  foo <- "bar"; var <- quo(foo)
+  foo <- "bar"
+  var <- quo(foo)
   expect_identical(fn(mtcars, list(var, !!var)), list(quo(foo), "bar"))
 
   var <- quo(cyl)
@@ -134,7 +135,10 @@ test_that("can unquote for old-style NSE functions", {
 
 test_that("all quosures in the call are evaluated", {
   foobar <- function(x) paste0("foo", x)
-  x <- new_quosure(call("foobar", local({ bar <- "bar"; quo(bar) })))
+  x <- new_quosure(call("foobar", local({
+    bar <- "bar"
+    quo(bar)
+  })))
   f <- new_quosure(call("identity", x))
   expect_identical(eval_tidy(f), "foobar")
 })
@@ -159,7 +163,7 @@ test_that("inner formulas are rechained to evaluation env", {
   env <- child_env(NULL)
   f1 <- quo(env$eval_env1 <- get_env())
   f2 <- quo({
-    !! f1
+    !!f1
     env$eval_env2 <- get_env()
   })
 
@@ -178,7 +182,7 @@ test_that("whole scope is purged", {
   outside <- child_env(NULL, important = TRUE)
   top <- child_env(outside, foo = "bar", hunoz = 1)
   mid <- child_env(top, bar = "baz", hunoz = 2)
-  bottom <- child_env(mid, !!! list(.top_env = top, .env = 1, `~` = 2))
+  bottom <- child_env(mid, !!!list(.top_env = top, .env = 1, `~` = 2))
 
   overscope_clean(bottom)
 
@@ -189,7 +193,7 @@ test_that("whole scope is purged", {
 })
 
 test_that("empty quosure self-evaluates", {
-  quo <- quo(is_missing(!! quo()))
+  quo <- quo(is_missing(!!quo()))
   expect_true(eval_tidy(quo))
 })
 
@@ -224,7 +228,7 @@ test_that(".env pronoun refers to current quosure (#174)", {
 
   outer_quo <- local({
     var <- "outer"
-    quo(identity(!! inner_quo))
+    quo(identity(!!inner_quo))
   })
 
   expect_identical(eval_tidy(outer_quo), "inner")

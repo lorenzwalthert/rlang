@@ -388,7 +388,8 @@ lang_fn <- function(lang) {
     abort("`lang` must quote a lang")
   }
 
-  switch_lang(expr,
+  switch_lang(
+    expr,
     recursive = abort("`lang` does not lang a named or inlined function"),
     inlined = node_car(expr),
     named = ,
@@ -426,7 +427,8 @@ lang_name <- function(lang) {
     abort("`lang` must be a call or must wrap a call (e.g. in a quosure)")
   }
 
-  switch_lang(lang,
+  switch_lang(
+    lang,
     named = as_string(node_car(lang)),
     namespaced = as_string(node_cadr(node_cdar(lang))),
     NULL

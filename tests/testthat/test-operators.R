@@ -21,4 +21,3 @@ test_that("%|% fails with wrong types", {
   expect_error(c(1L, NA) %|% 2)
   expect_error(c(1, NA) %|% "")
 })
-

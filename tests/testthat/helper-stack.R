@@ -1,7 +1,7 @@
 
 fixup_calls <- function(x) {
   cur_pos <- sys.nframe() - 1
-  x[seq(n+1, length(x))]
+  x[seq(n + 1, length(x))]
 }
 
 fixup_ctxt_depth <- function(x) {

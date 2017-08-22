@@ -104,7 +104,8 @@ NULL
 #' @rdname vector-coercion
 #' @export
 as_logical <- function(x) {
-  coerce_type_vec(x, friendly_type("logical"),
+  coerce_type_vec(
+    x, friendly_type("logical"),
     logical = set_attrs(x, NULL),
     integer = as_base_type(x, as.logical),
     double = as_integerish_type(x, as.logical, "logical")
@@ -113,7 +114,8 @@ as_logical <- function(x) {
 #' @rdname vector-coercion
 #' @export
 as_integer <- function(x) {
-  coerce_type_vec(x, friendly_type("integer"),
+  coerce_type_vec(
+    x, friendly_type("integer"),
     logical = as_base_type(x, as.integer),
     integer = set_attrs(x, NULL),
     double = as_integerish_type(x, as.integer, "integer")
@@ -122,7 +124,8 @@ as_integer <- function(x) {
 #' @rdname vector-coercion
 #' @export
 as_double <- function(x) {
-  coerce_type_vec(x, friendly_type("double"),
+  coerce_type_vec(
+    x, friendly_type("double"),
     logical = ,
     integer = as_base_type(x, as.double),
     double = set_attrs(x, NULL)
@@ -131,7 +134,8 @@ as_double <- function(x) {
 #' @rdname vector-coercion
 #' @export
 as_complex <- function(x) {
-  coerce_type_vec(x, friendly_type("complex"),
+  coerce_type_vec(
+    x, friendly_type("complex"),
     logical = ,
     integer = ,
     double = as_base_type(x, as.complex),
@@ -141,7 +145,8 @@ as_complex <- function(x) {
 #' @rdname vector-coercion
 #' @export
 as_character <- function(x, encoding = NULL) {
-  coerce_type_vec(x, friendly_type("character"),
+  coerce_type_vec(
+    x, friendly_type("character"),
     string = ,
     character = set_chr_encoding(set_attrs(x, NULL), encoding)
   )
@@ -149,7 +154,8 @@ as_character <- function(x, encoding = NULL) {
 #' @rdname vector-coercion
 #' @export
 as_string <- function(x, encoding = NULL) {
-  x <- coerce_type(x, friendly_type("string"),
+  x <- coerce_type(
+    x, friendly_type("string"),
     symbol = {
       if (!is.null(encoding)) {
         warn("`encoding` argument ignored for symbols")
@@ -163,7 +169,8 @@ as_string <- function(x, encoding = NULL) {
 #' @rdname vector-coercion
 #' @export
 as_list <- function(x) {
-  switch_type(x,
+  switch_type(
+    x,
     environment = env_as_list(x),
     vec_as_list(x)
   )
@@ -174,7 +181,8 @@ env_as_list <- function(x) {
   set_names(x, .Call(rlang_unescape_character, names_x))
 }
 vec_as_list <- function(x) {
-  coerce_type_vec(x, friendly_type("list"),
+  coerce_type_vec(
+    x, friendly_type("list"),
     logical = ,
     integer = ,
     double = ,

@@ -198,7 +198,10 @@ test_that("ctxt_stack() subsets n frames", {
   expect_identical(stack_n, stack)
 
   # Get correct eval depth within expect_error()
-  expect_error({ n <- ctxt_depth(); stop() })
+  expect_error({
+    n <- ctxt_depth()
+    stop()
+  })
   expect_error(ctxt_stack(n + 1), "not that many frames")
 })
 
@@ -212,7 +215,10 @@ test_that("call_stack() subsets n frames", {
   expect_identical(stack_n, stack)
 
   # Get correct eval depth within expect_error()
-  expect_error({ n <- call_depth(); stop() })
+  expect_error({
+    n <- call_depth()
+    stop()
+  })
   expect_error(call_stack(n + 1), "not that many frames")
 })
 

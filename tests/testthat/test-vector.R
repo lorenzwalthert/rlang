@@ -110,7 +110,8 @@ test_that("vectors and names are squashed", {
 })
 
 test_that("bad outer names warn even at depth", {
-  expect_warning(regex = "Outer names",
+  expect_warning(
+    regex = "Outer names",
     expect_identical(squash_dbl(list(list(list(A = c(a = 1))))), c(a = 1))
   )
 })
@@ -172,15 +173,17 @@ test_that("flatten_if() handles external pointers", {
 })
 
 test_that("flatten() splices names", {
-  expect_warning(regexp = "Outer names",
+  expect_warning(
+    regexp = "Outer names",
     expect_identical(
-      flatten(list(a = list(A = TRUE), b = list(B = FALSE))) ,
+      flatten(list(a = list(A = TRUE), b = list(B = FALSE))),
       list(A = TRUE, B = FALSE)
     )
   )
-  expect_warning(regexp = "Outer names",
+  expect_warning(
+    regexp = "Outer names",
     expect_identical(
-      flatten(list(a = list(TRUE), b = list(FALSE))) ,
+      flatten(list(a = list(TRUE), b = list(FALSE))),
       list(TRUE, FALSE)
     )
   )

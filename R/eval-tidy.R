@@ -228,7 +228,7 @@ as_overscope <- function(quo, data = NULL) {
 
   # Emulate dynamic scope for established data
   if (is_vector(data)) {
-    bottom <- env_bury(bottom, !!! discard_unnamed(data))
+    bottom <- env_bury(bottom, !!!discard_unnamed(data))
   } else if (is_env(data)) {
     bottom <- env_clone(data, parent = bottom)
   } else if (!is_null(data)) {
@@ -305,7 +305,7 @@ overscope_clean <- function(overscope) {
   # At this level we only want to remove what we have installed
   env_unbind(overscope, c("~", ".top_env", ".env"))
 
-  while(!identical(cur_env, env_parent(top_env))) {
+  while (!identical(cur_env, env_parent(top_env))) {
     env_unbind(cur_env, names(cur_env))
     cur_env <- env_parent(cur_env)
   }

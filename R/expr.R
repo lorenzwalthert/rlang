@@ -243,7 +243,8 @@ expr_label <- function(expr) {
 #' @rdname expr_label
 #' @export
 expr_name <- function(expr) {
-  switch_type(expr,
+  switch_type(
+    expr,
     symbol = as_string(expr),
     quosure = ,
     language = {

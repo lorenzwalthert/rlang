@@ -461,7 +461,8 @@ quo_name <- function(quo) {
 }
 
 quo_splice <- function(x, parent = NULL, warn = FALSE) {
-  switch_expr(x,
+  switch_expr(
+    x,
     language = {
       if (is_quosure(x)) {
         if (!is_false(warn)) {
@@ -486,7 +487,7 @@ quo_splice <- function(x, parent = NULL, warn = FALSE) {
       }
     },
     pairlist = {
-      while(!is_null(x)) {
+      while (!is_null(x)) {
         quo_splice(node_car(x), x, warn = warn)
         x <- node_cdr(x)
       }

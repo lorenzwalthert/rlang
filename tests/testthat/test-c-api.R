@@ -13,10 +13,13 @@ test_that("chr_append() appends", {
 test_that("r_warn() signals", {
   handler <- function(c) expect_null(c$call)
 
-  expect_warning(regexp = "foo",
-    with_handlers(warning = inplace(handler),
+  expect_warning(
+    regexp = "foo",
+    with_handlers(
+      warning = inplace(handler),
       .Call(rlang_test_r_warn, "foo")
-    ))
+    )
+  )
 })
 
 test_that("r_on_exit() adds deferred expr", {

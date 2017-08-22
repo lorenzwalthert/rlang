@@ -87,10 +87,10 @@ with_handlers <- function(.expr, ...) {
     abort("all handlers should inherit from `exiting` or `inplace`")
   }
   if (length(exiting)) {
-    quo <- quo(tryCatch(!! quo, !!! exiting))
+    quo <- quo(tryCatch(!!quo, !!!exiting))
   }
   if (length(inplace)) {
-    quo <- quo(withCallingHandlers(!! quo, !!! inplace))
+    quo <- quo(withCallingHandlers(!!quo, !!!inplace))
   }
 
   eval_tidy(quo)
