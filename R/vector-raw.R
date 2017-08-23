@@ -18,8 +18,7 @@ new_bytes <- function(x) {
 #' @return A raw vector of bytes.
 #' @export
 as_bytes <- function(x) {
-  switch(
-    typeof(x),
+  switch(typeof(x),
     raw = return(x),
     character = if (is_string(x)) return(charToRaw(x))
   )

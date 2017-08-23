@@ -97,8 +97,7 @@ dots_clean_empty <- function(dots, is_empty, ignore_empty) {
 
   if (n_dots) {
     which <- match.arg(ignore_empty, c("trailing", "none", "all"))
-    switch(
-      which,
+    switch(which,
       trailing =
         if (is_empty(dots[[n_dots]])) {
           dots[[n_dots]] <- NULL

@@ -1098,8 +1098,7 @@ env_type <- function(env) {
   }
 }
 friendly_env_type <- function(type) {
-  switch(
-    type,
+  switch(type,
     global = "the global environment",
     empty = "the empty environment",
     base = "the base environment",

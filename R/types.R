@@ -484,8 +484,7 @@ friendly_type <- function(type) {
 }
 
 friendly_type_of <- function(type) {
-  switch(
-    type,
+  switch(type,
     logical = "a logical vector",
     integer = "an integer vector",
     numeric = ,
@@ -523,8 +522,7 @@ friendly_type_of <- function(type) {
 }
 
 friendly_lang_type_of <- function(type) {
-  switch(
-    type,
+  switch(type,
     named = "a named call",
     namespaced = "a namespaced call",
     recursive = "a recursive call",
@@ -533,8 +531,7 @@ friendly_lang_type_of <- function(type) {
 }
 
 friendly_expr_type_of <- function(type) {
-  switch(
-    type,
+  switch(type,
     NULL = "NULL",
     name = ,
     symbol = "a symbol",
